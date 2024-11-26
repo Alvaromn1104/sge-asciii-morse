@@ -5,63 +5,99 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        // Mapa de caracteres ASCII a código Morse
-        HashMap<Character, String> asciiToMorse = new HashMap<>();
-        asciiToMorse.put('A', ".-");
-        asciiToMorse.put('B', "-...");
-        asciiToMorse.put('C', "-.-.");
-        asciiToMorse.put('D', "-..");
-        asciiToMorse.put('E', ".");
-        asciiToMorse.put('F', "..-.");
-        asciiToMorse.put('G', "--.");
-        asciiToMorse.put('H', "....");
-        asciiToMorse.put('I', "..");
-        asciiToMorse.put('J', ".---");
-        asciiToMorse.put('K', "-.-");
-        asciiToMorse.put('L', ".-..");
-        asciiToMorse.put('M', "--");
-        asciiToMorse.put('N', "-.");
-        asciiToMorse.put('O', "---");
-        asciiToMorse.put('P', ".--.");
-        asciiToMorse.put('Q', "--.-");
-        asciiToMorse.put('R', ".-.");
-        asciiToMorse.put('S', "...");
-        asciiToMorse.put('T', "-");
-        asciiToMorse.put('U', "..-");
-        asciiToMorse.put('V', "...-");
-        asciiToMorse.put('W', ".--");
-        asciiToMorse.put('X', "-..-");
-        asciiToMorse.put('Y', "-.--");
-        asciiToMorse.put('Z', "--..");
-        asciiToMorse.put('1', ".----");
-        asciiToMorse.put('2', "..---");
-        asciiToMorse.put('3', "...--");
-        asciiToMorse.put('4', "....-");
-        asciiToMorse.put('5', ".....");
-        asciiToMorse.put('6', "-....");
-        asciiToMorse.put('7', "--...");
-        asciiToMorse.put('8', "---..");
-        asciiToMorse.put('9', "----.");
-        asciiToMorse.put('0', "-----");
-        asciiToMorse.put(' ', "/");
+        // Mapas para la traducción Morse <-> ASCII
+        HashMap<String, String> morseToAscii = new HashMap<>();
+        HashMap<String, String> asciiToMorse = new HashMap<>();
 
-        // Escáner para leer la entrada del usuario
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Introduce una frase para traducir a Morse:");
-        String input = scanner.nextLine().toUpperCase();
+        // Rellenar los mapas
+        morseToAscii.put(".-", "A");
+        morseToAscii.put("-...", "B");
+        morseToAscii.put("-.-.", "C");
+        morseToAscii.put("-..", "D");
+        morseToAscii.put(".", "E");
+        morseToAscii.put("..-.", "F");
+        morseToAscii.put("--.", "G");
+        morseToAscii.put("....", "H");
+        morseToAscii.put("..", "I");
+        morseToAscii.put(".---", "J");
+        morseToAscii.put("-.-", "K");
+        morseToAscii.put(".-..", "L");
+        morseToAscii.put("--", "M");
+        morseToAscii.put("-.", "N");
+        morseToAscii.put("---", "O");
+        morseToAscii.put(".--.", "P");
+        morseToAscii.put("--.-", "Q");
+        morseToAscii.put(".-.", "R");
+        morseToAscii.put("...", "S");
+        morseToAscii.put("-", "T");
+        morseToAscii.put("..-", "U");
+        morseToAscii.put("...-", "V");
+        morseToAscii.put(".--", "W");
+        morseToAscii.put("-..-", "X");
+        morseToAscii.put("-.--", "Y");
+        morseToAscii.put("--..", "Z");
+        morseToAscii.put(".----", "1");
+        morseToAscii.put("..---", "2");
+        morseToAscii.put("...--", "3");
+        morseToAscii.put("....-", "4");
+        morseToAscii.put(".....", "5");
+        morseToAscii.put("-....", "6");
+        morseToAscii.put("--...", "7");
+        morseToAscii.put("---..", "8");
+        morseToAscii.put("----.", "9");
+        morseToAscii.put("-----", "0");
+        morseToAscii.put("/", " "); // Separador de palabras
 
-        StringBuilder morseTranslation = new StringBuilder();
-
-        // Traducción de la frase a Morse
-        for (char c : input.toCharArray()) {
-            if (asciiToMorse.containsKey(c)) {
-                morseTranslation.append(asciiToMorse.get(c)).append(" ");
-            } else {
-                morseTranslation.append("? "); // Caracter desconocido
-            }
+        // Invertir morseToAscii para obtener asciiToMorse
+        for (String key : morseToAscii.keySet()) {
+            asciiToMorse.put(morseToAscii.get(key), key);
         }
 
-        System.out.println("Traducción a Morse:");
-        System.out.println(morseTranslation.toString().trim());
+        // Escáner para la entrada del usuario
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("¿Qué deseas hacer?");
+        System.out.println("1. Traducir de ASCII a Morse");
+        System.out.println("2. Traducir de Morse a ASCII");
+        System.out.print("Introduce tu opción (1 o 2): ");
+        int opcion = scanner.nextInt();
+        scanner.nextLine(); // Consumir salto de línea
+
+        if (opcion == 1) {
+            // Traducción de ASCII a Morse
+            System.out.print("Introduce un mensaje en texto ASCII: ");
+            String asciiInput = scanner.nextLine().toUpperCase();
+
+            StringBuilder morseMessage = new StringBuilder();
+            for (char c : asciiInput.toCharArray()) {
+                String morse = asciiToMorse.get(String.valueOf(c));
+                if (morse != null) {
+                    morseMessage.append(morse).append(" ");
+                } else {
+                    morseMessage.append("? "); // Caracter desconocido
+                }
+            }
+            System.out.println("El mensaje en Morse es: " + morseMessage.toString().trim());
+        } else if (opcion == 2) {
+            // Traducción de Morse a ASCII
+            System.out.print("Introduce un mensaje en código Morse (separado por espacios): ");
+            String morseInput = scanner.nextLine();
+
+            String[] morseArray = morseInput.split(" ");
+            StringBuilder asciiMessage = new StringBuilder();
+            for (String morse : morseArray) {
+                String ascii = morseToAscii.get(morse);
+                if (ascii != null) {
+                    asciiMessage.append(ascii);
+                } else {
+                    asciiMessage.append("?"); // Código Morse desconocido
+                }
+            }
+            System.out.println("El mensaje en ASCII es: " + asciiMessage.toString());
+        } else {
+            System.out.println("Opción no válida. Por favor, selecciona 1 o 2.");
+        }
+
+        scanner.close();
     }
 }
